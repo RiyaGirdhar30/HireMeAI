@@ -3,6 +3,7 @@ import time
 import json
 from pathlib import Path
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from groq import Groq
 from pydantic import BaseModel, Field, field_validator
@@ -18,7 +19,17 @@ if not my_api_key:
 client=Groq(api_key=my_api_key)
 model = "openai/gpt-oss-120b"
 
-app=FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    resume_path = Path(__file__).resolve().parent / "RIYA_GIRDHAR-RESUME..pdf"
+
+    resume_text = read_pdf(resume_path)
+    app.state.resume = parse_resume(resume_text)
+
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -193,9 +204,9 @@ def home():
 
 @app.post("/chat")
 def chat(request: ChatRequest):
-    resume_text=read_pdf(Path("RIYA_GIRDHAR-RESUME..pdf"))
-    resume=parse_resume(resume_text)
-    answer=ask_candidate(request.question, resume)
+    resume = app.state.resume
+    answer = ask_candidate(request.question, resume)
+
     return {
         "answer": answer
     }
