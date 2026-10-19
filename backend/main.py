@@ -21,7 +21,12 @@ model = "openai/gpt-oss-120b"
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    resume_path = Path(__file__).resolve().parent / "RIYA_GIRDHAR-RESUME..pdf"
+    resume_path = Path(
+        os.getenv(
+            "RESUME_PATH",
+            str(Path(__file__).resolve().parent / "RIYA_GIRDHAR-RESUME..pdf")
+        )
+    )
 
     resume_text = read_pdf(resume_path)
     app.state.resume = parse_resume(resume_text)
