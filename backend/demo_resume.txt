@@ -1,0 +1,33 @@
+DEMO CANDIDATE RESUME
+
+Name: Alex Morgan
+Email: alex.morgan@example.com
+Phone: +1-555-010-1234
+
+Professional Summary:
+Entry-level software developer interested in full-stack web development and building AI-powered applications.
+
+Skills:
+- Python
+- JavaScript
+- React
+- FastAPI
+- SQL
+- Git and GitHub
+- REST APIs
+
+Education:
+Bachelor of Science in Computer Science, Example University, 2025.
+
+Projects:
+1. Task Manager — A web application for managing tasks with a React frontend and FastAPI backend.
+2. Weather Dashboard — A dashboard that displays weather information using a public API.
+3. AI Study Assistant — A prototype that answers questions using provided study notes.
+
+Experience:
+No professional work experience listed.
+
+Certifications:
+No certifications listed.
+
+Note: This is fictional demonstration data, not a real person's resume.

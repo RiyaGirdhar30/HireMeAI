@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
         )
     )
 
-    resume_text = read_pdf(resume_path)
+    resume_text = read_resume_file(resume_path)
     app.state.resume = parse_resume(resume_text)
 
     yield
@@ -186,17 +186,23 @@ def parse_resume(resume_text):
 
 
 #pdf extraction
-def read_pdf(file_path: Path):
-    reader=PdfReader(file_path)
-    text=""
+def read_resume_file(file_path: Path):
+    if file_path.suffix.lower() == ".txt":
+        return file_path.read_text(encoding="utf-8")
 
-    for page in reader.pages:
-        page_text=page.extract_text()
+    if file_path.suffix.lower() == ".pdf":
+        reader = PdfReader(file_path)
+        text = ""
 
-        if page_text:
-            text+=page_text + "\n"
+        for page in reader.pages:
+            page_text = page.extract_text()
 
-    return text
+            if page_text:
+                text += page_text + "\n"
+
+        return text
+
+    raise ValueError("Unsupported resume file type. Use PDF or TXT.")
 
 @app.get("/")
 def home():
