@@ -90,6 +90,35 @@ setLoading(true);
     setLastFailedQuestion("");
   }
 
+useEffect(() => {
+  const updateViewportHeight = () => {
+    const viewportHeight = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+    document.documentElement.style.setProperty(
+      "--app-height",
+      `${viewportHeight}px`
+    );
+  };
+
+  updateViewportHeight();
+
+  window.addEventListener("resize", updateViewportHeight);
+  window.visualViewport?.addEventListener(
+    "resize",
+    updateViewportHeight
+  );
+
+  return () => {
+    window.removeEventListener("resize", updateViewportHeight);
+    window.visualViewport?.removeEventListener(
+      "resize",
+      updateViewportHeight
+    );
+  };
+}, []);
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
